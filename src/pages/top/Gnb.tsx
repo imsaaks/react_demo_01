@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router';
 import axiosApi from '@common/service/AxiosApi.ts';
 import useOutsideClick from '@common/custom-hook/useOutsideClick.ts';
 import { useCookies } from "react-cookie";
-
+import { type MemberBasicInfo } from '@pages/member/props/MemberProps.ts';
+import {ConfigConstants} from "@common/constants/ConfigConstants.ts";
 
 const Gnb = () => {
 
@@ -13,6 +14,7 @@ const Gnb = () => {
     const [cookies, setCookie, removeCookie] = useCookies();
     const api = axiosApi();
     const navigate = useNavigate();
+    const info: MemberBasicInfo = JSON.parse(localStorage.getItem(ConfigConstants.USER_BASIC_INFO_KEY_NAME) || '{}');
 
     useOutsideClick(dropRef, ()=> {
         setIsPopOpen(false);
@@ -33,6 +35,8 @@ const Gnb = () => {
         Object.keys(cookies).forEach((cookieName) => {
             removeCookie(cookieName, { path: '/' }); // 설정했던 path 옵션과 일치해야 삭제됨
         });
+        // storage 모두 삭제
+        localStorage.clear();
         navigate('/');
     }
 
@@ -58,7 +62,7 @@ const Gnb = () => {
                             <div className="gnb-dropdown-layer" ref={dropRef}>
                                 <a href="#" className={isPopOpen? 'btn-more is-open': 'btn-more' }
                                    onClick={(e) => {e.preventDefault(); setIsPopOpen((isPopOpen) => !isPopOpen)}}>
-                                    <i className="icon-user"></i> <span className="txt-name">홍길동님</span> <span className="txt-team">총무팀/계장</span> <i className="icon-more-rotate"></i>
+                                    <i className="icon-user"></i> <span className="txt-name">{info.hnglNm}님</span> <span className="txt-team">{info.teamNm} / {info.roleNm}</span> <i className="icon-more-rotate"></i>
                                 </a>
 
                                 { isPopOpen &&

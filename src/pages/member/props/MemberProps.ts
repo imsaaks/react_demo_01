@@ -20,3 +20,11 @@ export class MemberSearchVo {
 
     delYn:string = 'N';
 }
+
+export interface MemberBasicInfo {
+    empno: string;
+    hnglNm: string;
+    roleNm?:string;
+    teamNm?: string;
+
+}

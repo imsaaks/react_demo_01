@@ -7,17 +7,17 @@ const ContentsHead = () => {
                 <div className="cont-grow">
                     <em className="txt-desc">총무</em>
                     <i className="icon-slash"></i>
-                    <em className="txt-desc">민방위관리</em>
+                    <em className="txt-desc">인사기록카드</em>
                     <i className="icon-slash"></i>
                     <a href="javascript:;" className="breadcrumb-link">
-                        <em className="txt-desc">민방위 연명부</em>
+                        <em className="txt-desc">인사기록카드</em>
                     </a>
                 </div>
             </div>
 
             <div className="common-title-a common-margin-top-a">
                 <div className="cont-grow">
-                    <span className="txt-title">민방위 연명부</span>
+                    <span className="txt-title">인사기록카드</span>
                 </div>
             </div>
         </>

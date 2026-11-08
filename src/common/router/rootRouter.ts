@@ -1,6 +1,9 @@
 import loadable from '@loadable/component'
 import { createBrowserRouter, redirect  } from "react-router";
 import axios from "axios";
+//
+import { type MemberBasicInfo } from '@pages/member/props/MemberProps.ts';
+import { ConfigConstants } from '@common/constants/ConfigConstants.ts';
 
 const HomeComponent: any = loadable(() => import('@pages/Home.tsx'));
 const LoginComponent: any = loadable(() => import ('@pages/login/Login.tsx'));
@@ -13,11 +16,20 @@ const MemberDetailComponent: any = loadable(() => import('@pages/member/MemberDe
 const ComError404Component: any = loadable(() => import('@common/error/ComError404.tsx'));
 
 
-// 인증 체크 함수 (예시)
+
+// 인증 체크 함수
 const checkAuth = () => {
     return axios.get('/api/v1/users/check/token').then((response) => {
         if (response.data) {
             if (response.data.state === 'NORMAL' && response.data.userDto !== null) {
+                // 기본 정보 (중요정보 제외) storage 에 저장
+                const info: MemberBasicInfo = {
+                    empno:  response.data.userDto.empno,
+                    hnglNm:  response.data.userDto.hnglNm,
+                    roleNm:  response.data.userDto.roleNm,
+                    teamNm:  response.data.userDto.teamNm
+                };
+                localStorage.setItem(ConfigConstants.USER_BASIC_INFO_KEY_NAME, JSON.stringify(info));
                 return true;
             }
         }

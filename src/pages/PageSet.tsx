@@ -55,12 +55,12 @@ const PageSet = () => {
                     <div className="layout_container" style={{'height': 'calc(100vh - 44px)'}}>
                         <Splitter style={{ 'height': 'calc(100vh - 44px)' }} gutterSize={19}>
 
-                            <SplitterPanel size={20} minSize={10}>
+                            <SplitterPanel size={13}>
                                 <Lnb></Lnb>
                             </SplitterPanel>
 
 
-                            <SplitterPanel size={80}>
+                            <SplitterPanel size={87}>
                                 <div className="layout-content">
                                     <Outlet></Outlet>
                                 </div>

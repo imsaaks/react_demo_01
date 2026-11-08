@@ -15,8 +15,12 @@ const MameberList = () => {
     const [searchVo, setSearchVo] = useState<MemberSearchVo>(new MemberSearchVo());
     const [pageable, setPageable] = useState<Pageable>(new Pageable());
     const [hdofCd, setHdofCd] = useState<string>('');
-    const [searchOption, setSearchOption] = useState<string>('empno');
+    const [searchOption, setSearchOption] = useState<string>('hnglNm');
+    const [oldSearchOption, setOldSearchOption] = useState<string>('hnglNm');
     const navigate = useNavigate();
+    const [searchText, setSearchText] = useState('');
+    const [oldSearchText, setOldSearchText] = useState('');
+    const [isSeaching, setIsSeaching] = useState<boolean>(false);
 
     const getComCodeList= (key: string, isAddNull?: boolean): any[] => {
         return CommonUtil.getCommonCodeList(key, isAddNull);
@@ -39,6 +43,14 @@ const MameberList = () => {
                 setPageable(CommonUtil.getPageable(response.data));
             }
             setDataList(data);
+            if (isSeaching) {
+                if (searchText !== oldSearchText) {
+                    setSearchText(oldSearchText);
+                }
+                if (searchOption !== oldSearchOption) {
+                    setSearchOption(oldSearchOption);
+                }
+            }
         }).catch((error) => {
             console.error(error);
         });
@@ -81,6 +93,40 @@ const MameberList = () => {
     }
     const searchOptionChangeHandler = (e: any) => {
         setSearchOption(e);
+    }
+    const searchTextKeyHandler = (e: any) => {
+        if (e.key === 'Enter') {
+            //
+            goSearch();
+        }
+    }
+
+    const goSearch = () => {
+        setIsSeaching(true);
+        setOldSearchText(searchText);
+        setOldSearchOption(searchOption);
+        const _copy: MemberSearchVo = structuredClone(searchVo);
+        _copy.pageNo = 0;
+        _copy.hnglNm = '';
+        _copy.empno = '';
+        if (searchText && (searchText).trim().length > 0) {
+            if (searchOption === 'hnglNm') {
+                _copy.hnglNm = searchText;
+            } else {
+                _copy.empno = searchText;
+            }
+        }
+        setSearchVo(_copy);
+    }
+
+    const goReset = () => {
+        setIsSeaching(false);
+        setSearchText('');
+        setHdofCd('');
+        setOldSearchText('');
+        setSearchOption('hnglNm');
+        setOldSearchOption('hnglNm');
+        setSearchVo({...searchVo, pageNo: 0, hdofCd: '', hnglNm:'', empno:''});
     }
 
 
@@ -150,13 +196,16 @@ const MameberList = () => {
                                                                 </div>
                                                                 <div className="cont-grow">
                                                                     <div className="input-field">
-                                                                        <input type="text" placeholder="검색어 입력" autoComplete="off" maxLength={20}/>
+                                                                        <input type="text" placeholder="검색어 입력" autoComplete="off" maxLength={20}
+                                                                        value={searchText}
+                                                                        onChange={(e) => setSearchText(e.target.value)}
+                                                                        onKeyDown={searchTextKeyHandler}/>
                                                                     </div>
                                                                 </div>
                                                             </div>
 
 
-                                                            <button type="button" className="button-outline size-medium">
+                                                            <button type="button" className="button-outline size-medium" onClick={goSearch}>
                                                                 <span className="btn-inner">
                                                                     <em className="btn-txt">조회</em>
                                                                 </span>
@@ -324,9 +373,22 @@ const MameberList = () => {
                                                 { (!dataList || dataList.length == 0) &&
                                                     <tr>
                                                         <td className="td-nodata" colSpan={10}>
-                                                            <div className="nodata-frame">
-                                                                <span className="txt-nodata">등록된 데이터가 없습니다</span>
-                                                            </div>
+                                                            { isSeaching !== true &&
+                                                                <div className="nodata-frame">
+                                                                    <span className="txt-nodata">등록된 데이터가 없습니다</span>
+                                                                </div>
+                                                            }
+
+                                                            { isSeaching === true &&
+                                                                <div className="nodata-frame">
+                                                                    <span className="txt-nodata">검색 결과가 없습니다.</span>
+                                                                    <button type="button" className="button-solid size-small" onClick={goReset}>
+                                                                            <span className="btn-inner">
+                                                                                <em className="btn-txt">검색 초기화</em>
+                                                                            </span>
+                                                                    </button>
+                                                                </div>
+                                                            }
                                                         </td>
                                                     </tr>
                                                 }

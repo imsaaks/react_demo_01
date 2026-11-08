@@ -19,8 +19,8 @@ React 데모 개발 소스 입니다.
 
 주 패키지 & Component  
 src/App.tsx  
-src/common/router/rootRouter.ts
-src/common/store/loadingSlice.ts
+src/common/router/rootRouter.ts  
+src/common/store/loadingSlice.ts  
 src/common/store/store.ts  
 src/pages/PageSet.tsx  
 src/pages/member/MameberList.tsx  

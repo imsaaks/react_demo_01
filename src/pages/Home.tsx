@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from 'react-router';
 import { Lottie } from 'lottie-react';
-import lottieJson from '@assets/dist/json/loding_animation.json';
+import lottieJson from '@assets/pub/json/loding_animation.json';
 import AxiosApi from '@common/service/AxiosApi';
 
 const Home = () => {
